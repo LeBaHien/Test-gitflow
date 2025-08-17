@@ -29,4 +29,9 @@ uint32_t cb_write(cbuffer_t *cb, void *buf, uint32_t nbytes);
 
 uint32_t cb_data_count(cbuffer_t *cb);
 
-uint32_t cb_space_count(cbuffer_t *cb);
+uint32_t cb_space_count(cbuffer_t *cb)
+{
+    if (cb == NULL)
+        return NOT_VALID;
+    return cb->size - cb_data_count(cb) - 1;
+}
