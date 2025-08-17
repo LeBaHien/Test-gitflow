@@ -23,7 +23,24 @@ void cb_init(cbuffer_t *cb, void *buf, uint32_t size);
 
 void cb_clear(cbuffer_t *cb);
 
-uint32_t cb_read(cbuffer_t *cb, void *buf, uint32_t nbytes);
+uint32_t cb_read(cbuffer_t *cb, void *buf, uint32_t nbytes)
+{
+    if (cb == NULL || buf == NULL || !cb->active)
+        return NOT_VALID;
+    uint32_t count = 0;
+    while (count < nbytes)
+    {
+        if (cb_data_count(cb) == NOT_VALID)
+            break;
+        else
+        {
+            ((uint8_t*)buf)[count] = cb->data[cb->reader];
+            cb->reader = (cb->reader + 1) % cb->size;
+        }    
+        count++;
+    }
+    return count;
+}
 
 uint32_t cb_write(cbuffer_t *cb, void *buf, uint32_t nbytes);
 
