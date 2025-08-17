@@ -60,7 +60,27 @@ uint32_t cb_read(cbuffer_t *cb, void *buf, uint32_t nbytes)
     return count;
 }
 
-uint32_t cb_write(cbuffer_t *cb, void *buf, uint32_t nbytes);
+uint32_t cb_write(cbuffer_t *cb, void *buf, uint32_t nbytes)
+{
+    if (cb == NULL || buf == NULL || !(cb->active))
+        return NOT_VALID;
+    uint32_t count = 0;
+    while (count < nbytes)
+    {
+        if (cb_space_count(cb) == NOT_VALID)
+        {
+            cb->overflow = nbytes - count;
+            break;
+        }
+        else
+        {
+            cb->data[cb->writer] = ((uint8_t*)buf)[count];
+            cb->writer = (cb->writer + 1) % cb->size;
+        }    
+        count++;
+    }
+    return count;
+}
 
 uint32_t cb_data_count(cbuffer_t *cb);
 
