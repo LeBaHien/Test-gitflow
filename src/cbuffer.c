@@ -98,3 +98,6 @@ uint32_t cb_space_count(cbuffer_t *cb)
         return NOT_VALID;
     return cb->size - cb_data_count(cb) - 1;
 }
+
+//testtt
+void test(int a);
